@@ -117,10 +117,6 @@ public class Coordinador {
 	public Documento contarPalabras(Documento documento) throws FileNotFoundException, IOException {
 		ArrayList<String> listaRuta = documento.getRuta();
 		documento = contadores.contarPalabrasArchivo(documento);
-		//System.out.println("RUTA 1:"+listaRuta.get(0));
-		//System.out.println("Cantidad de palabras Ruta 1 "+ documento.getCantPalabras().get(0));
-		//System.out.println("Cantidad de palabras Ruta 2 "+ documento.getCantPalabras().get(1));
-		//return contadores;
 		return documento;
 	}
 
@@ -169,6 +165,17 @@ public class Coordinador {
 
 	public void setCaptions(Captions captions) {
 		this.captions = captions;
+		
+	}
+
+	@SuppressWarnings("static-access")
+	public void cargarVideo(String linkVideo) throws IOException {
+		captions.descargarSubtitulos(captions.getVideoId(linkVideo));
+		
+	}
+
+	public void escribirIndex() {
+		escribirIndex.escribirIndexDesdeArchivo("E:\\Escritorio\\LuceneTest2\\CaptionsTXT");
 		
 	}
 

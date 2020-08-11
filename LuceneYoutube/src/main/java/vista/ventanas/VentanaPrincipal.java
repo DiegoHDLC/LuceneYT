@@ -238,8 +238,22 @@ public class VentanaPrincipal extends JFrame {
 		JButton btnCargarVideo = new JButton("Cargar Video");
 		btnCargarVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				ArrayList<String> listaSubtitulos = new ArrayList<String>();
 				String link = txtLinkYT.getText();
-				//miCoordinador.cargarVideo();
+				try {
+					//Carga el video y descarga los archivos SRT
+					miCoordinador.cargarVideo(link);
+					//convierte el archivo SRT leído en archivos txt donde cada uno es una linea de subtítulo
+					listaSubtitulos = miCoordinador.leerSRT(panel1);
+					for(int i = 0; i < listaSubtitulos.size(); i++) {
+						miCoordinador.crearDocumento(listaSubtitulos.get(i),i, "txt");
+					}
+					miCoordinador.eliminarIndex();
+					miCoordinador.escribirIndex();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		sl_panel1.putConstraint(SpringLayout.NORTH, btnCargarVideo, 28, SpringLayout.NORTH, panel1);

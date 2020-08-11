@@ -90,10 +90,11 @@ public class Captions {
         // This OAuth 2.0 access scope allows for full read/write access to the
         // authenticated user's account and requires requests to use an SSL connection.
         List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube.force-ssl");
-
+        
         try {
             // Authorize the request.
             Credential credential = Auth.authorize(scopes, "captions");
+            String linkVideo = "";
 
             // This object is used to make YouTube Data API requests.
             youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, credential)
@@ -106,10 +107,10 @@ public class Captions {
             Action action = Action.valueOf(actionString.toUpperCase());
             switch (action) {
               case UPLOAD:
-                uploadCaption(getVideoId(), getLanguage(), getName(), getCaptionFromUser());
+                uploadCaption(getVideoId(linkVideo), getLanguage(), getName(), getCaptionFromUser());
                 break;
               case LIST:
-                listCaptions(getVideoId());
+                listCaptions(getVideoId(linkVideo));
                 break;
               case UPDATE:
                 updateCaption(getCaptionIDFromUser(), getUpdateCaptionFromUser());
@@ -122,7 +123,7 @@ public class Captions {
                 break;
                 
               case TEST:
-            	  testeando(getVideoId());
+            	  descargarSubtitulos(getVideoId("https://www.youtube.com/watch?v=LNl2bLJilt0"));
             	  break;
               default:
                 // All the available methods are used in sequence just for the sake
@@ -131,7 +132,7 @@ public class Captions {
                 //Prompt the user to specify a video to upload the caption track for and
                 // a language, a name, a binary file for the caption track. Then upload the
                 // caption track with the values that are selected by the user.
-                String videoId = getVideoId();
+                String videoId = getVideoId(linkVideo);
                 uploadCaption(videoId, getLanguage(), getName(), getCaptionFromUser());
                 List<Caption> captions = listCaptions(videoId);
                 if (captions.isEmpty()) {
@@ -159,10 +160,21 @@ public class Captions {
         }
     }
 
-    private static void testeando(String videoId) {
+    public static void descargarSubtitulos(String videoId) {
+    	
+    	
+    	List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube.force-ssl");
+   
 		try {
-			
-			List<Caption> captions = listCaptions(videoId);
+			 // Authorize the request.
+            Credential credential = Auth.authorize(scopes, "captions");
+            //String linkVideo = "";
+
+            // This object is used to make YouTube Data API requests.
+            youtube = new YouTube.Builder(Auth.HTTP_TRANSPORT, Auth.JSON_FACTORY, credential)
+                    .setApplicationName("youtube-cmdline-captions-sample").build();
+			String id = videoId;
+			List<Caption> captions = listCaptions(id);
 			 if (captions.isEmpty()) {
                  System.out.println("Can't get video caption tracks.");
              } else {
@@ -173,9 +185,9 @@ public class Captions {
             	 String idES = captions.get(2).getId(); // ESPAÑOL
             	 
                  for (Caption caption : captions) {  
-                	 snippet = caption.getSnippet();
+                	 //snippet = caption.getSnippet();
                 	
-                	 System.out.println(""+ snippet.getLanguage());
+                	 //System.out.println(""+ snippet.getLanguage());
                 	 
                 	 //Se elige el idioma inglés
                 	 if(caption.getId() == idEN) {
@@ -386,22 +398,23 @@ public class Captions {
      * caption tracks for the video specified by the video id.
      * @throws IOException
      */
-    private static List<Caption> listCaptions(String videoId) throws IOException {
+    public static List<Caption> listCaptions(String videoId) throws IOException {
       // Call the YouTube Data API's captions.list method to
       // retrieve video caption tracks.
+    	System.out.println("videoID: "+videoId);
       CaptionListResponse captionListResponse = youtube.captions().
           list("snippet", videoId).execute();
 
       List<Caption> captions = captionListResponse.getItems();
       // Print information from the API response.
-     // System.out.println("\n================== Returned Caption Tracks ==================\n");
+     System.out.println("\n================== Returned Caption Tracks ==================\n");
       CaptionSnippet snippet;
       for (Caption caption : captions) {
           snippet = caption.getSnippet();
-         // System.out.println("  - ID: " + caption.getId());
-          //System.out.println("  - Name: " + snippet.getName());
-          //System.out.println("  - Language: " + snippet.getLanguage());
-          //System.out.println("\n-------------------------------------------------------------\n");
+          System.out.println("  - ID: " + caption.getId());
+          System.out.println("  - Name: " + snippet.getName());
+          System.out.println("  - Language: " + snippet.getLanguage());
+          System.out.println("\n-------------------------------------------------------------\n");
       }
 
       return captions;
@@ -526,18 +539,18 @@ public class Captions {
     /*
      * Prompt the user to enter a video ID. Then return the ID.
      */
-    private static String getVideoId() throws IOException {
+    public static String getVideoId(String linkVideo) throws IOException {
 
         String videoId = "";
-        System.out.print("Please enter a video id: ");
+        //System.out.print("Please enter a video id: ");
         
         
 
-        videoId = getMatchId();
+        videoId = getMatchId(linkVideo);
        // BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
         //videoId = bReader.readLine();
 
-        System.out.println("You chose " + videoId + " for captions.");
+        //System.out.println("You chose " + videoId + " for captions.");
         return videoId;
     }
 
@@ -545,10 +558,10 @@ public class Captions {
      * Prompt the user to enter a name for the caption track. Then return the name.
      */
     
-    private static String getMatchId() {
+    public static String getMatchId(String linkVideo) {
     	String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*";
     	Pattern compiledPattern = Pattern.compile(pattern);
-        Matcher matcher = compiledPattern.matcher("https://www.youtube.com/watch?v=t6mNUvxZNzo"); //url is youtube url for which you want to extract the id.
+        Matcher matcher = compiledPattern.matcher(linkVideo); //url is youtube url for which you want to extract the id.
         if (matcher.find()) {
              return matcher.group();
         }

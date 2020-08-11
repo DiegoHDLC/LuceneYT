@@ -146,10 +146,10 @@ public class LuceneSearchHighlighter
                 System.out.println("=======================");
                 
                 System.out.println(frag);
-                //miCoordinador.crearDocumento(frag + "<br>","html");
-               // miCoordinador.crearDocumento("<br>", "html");
-                //miCoordinador.crearDocumento(frag, "txt");
-              
+               //miCoordinador.crearDocumento(frag + "<br>","html");
+               //miCoordinador.crearDocumento("<br>", "html");
+               //miCoordinador.crearDocumento(frag, "txt");
+      
             }
         }
         Documento.i++;

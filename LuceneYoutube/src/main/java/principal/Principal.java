@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.UIManager;
 
-import com.google.api.services.samples.youtube.cmdline.*;
 import com.google.api.services.samples.youtube.cmdline.data.Captions;
 
 import controlador.Coordinador;
@@ -15,9 +14,6 @@ import modelo.Documento;
 import modelo.Logica;
 import modelo.LuceneSearchHighlighter;
 import modelo.LuceneWriteIndexFromFile;
-import modelo.LuceneSearchHighlighter;
-//import modelo.PDFBoxReadFromFile;
-//import modelo.Traductor;
 
 public class Principal {
 	public  static void main(String[] args) throws Exception {

@@ -69,7 +69,7 @@ public class Logica {
 	       chooser.setAcceptAllFileFilterUsed(false);
 	       //    
 	       if (chooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
-	    	   eliminarIndex();
+	    	 eliminarIndex();
 	         System.out.println("getCurrentDirectory(): " 
 	            +  chooser.getCurrentDirectory());
 	         System.out.println("getSelectedFile() : " 
