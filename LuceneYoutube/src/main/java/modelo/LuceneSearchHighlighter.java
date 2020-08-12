@@ -87,8 +87,9 @@ public class LuceneSearchHighlighter
         System.out.println(txtBuscarPalabras+"");
         Query query = qp.parse(txtBuscarPalabras+""/*cottage private discovery concluded*/);
          
-        //Buscar documentos lucene
-        TopDocs hits = searcher.search(query, 10);
+        //Buscar documentos lucene, los mejores 30 documentos
+        
+        TopDocs hits = searcher.search(query, 30);
          
         /** Highlighter Code Start ****/
          
@@ -130,13 +131,13 @@ public class LuceneSearchHighlighter
             
              //Imprimiendo donde se escuentras los documentos
             
-            System.out.println("Path " + " : " + title);
+           // System.out.println("Path " + " : " + title);
             
             String str = title;
             str = str.replaceAll("[^-?0-9+]", " "); 
             List<String> lista = Arrays.asList(str.trim().split(" "));
             int posicion = Integer.parseInt(lista.get(0));
-            System.out.println("Número de posicion: "+posicion);
+           // System.out.println("Número de posicion: "+posicion);
             subtitulos.posicionResaltado.add(posicion);
              
             //Obtiene el texto almacenado desde el documento
@@ -154,9 +155,9 @@ public class LuceneSearchHighlighter
             for (String frag : frags) 
             {
             	
-                System.out.println("=======================");
+               // System.out.println("=======================");
                 
-                System.out.println(frag);
+              //  System.out.println(frag);
                 //miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion-1) + "<br>", 0, "html");
                miCoordinador.crearDocumento(contador+".-"+frag + "<br>",0,"html");
                miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion) + "<br><br>", 0, "html");

@@ -10,6 +10,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -23,7 +24,6 @@ import org.fredy.jsrt.api.SRTReader;
 import org.fredy.jsrt.api.SRTTimeFormat;
 
 import vista.paneles.*;
-
 import controlador.Coordinador;
 
 public class Logica {
@@ -165,20 +165,47 @@ public class Logica {
         	subtitulos.tiempoMinutos.add(minutos);
         	subtitulos.tiempoSegundos.add(segundos);
         	//subtitulos.tiempoMinutos.add(SRTTimeFormat.format(s.startTime));
-           // System.out.println("Number: " + s.number);
-            //System.out.println("Start time: " + SRTTimeFormat.format(s.startTime));
-           // System.out.println("End time: " + SRTTimeFormat.format(s.endTime));
-           // System.out.println("Texts:");
+           System.out.println("Number: " + s.number);
+            System.out.println("Start time: " + SRTTimeFormat.format(s.startTime));
+           System.out.println("End time: " + SRTTimeFormat.format(s.endTime));
+           System.out.println("Texts:");
             for (String line : s.text) {
             	listaSubtitulos.add(line);
             	subtitulos.listSubtitulos.add(line);
             	//subtitulos.listSubtitulos.add(line);
-               // System.out.println("    " + line);
+                System.out.println("    " + line);
             }
            // System.out.println();
         }
 		
         return subtitulos;
+	}
+
+	public void abrirURL(String URL) throws java.net.URISyntaxException {
+		 if (java.awt.Desktop.isDesktopSupported()) {
+	            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+	            if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+	                try {
+	                    java.net.URI uri = new java.net.URI(URL);
+	                    desktop.browse(uri);
+	                } catch ( IOException ex) {
+	                   // Logger.getLogger(Acerca.class.getName()).log(Level.SEVERE, null, ex);
+	                }
+	            }
+	        }
+		
+	}
+
+	public String convervirTiempoEnLink(int index, Subtitulos subtitulos, String url) {
+		System.out.println("Valor index en conversor: "+index);
+		System.out.println("Valor de la posicion Resaltado: "+subtitulos.posicionResaltado.get(index));
+		double horas = subtitulos.tiempoHoras.get(subtitulos.posicionResaltado.get(index));
+		double minutos = subtitulos.tiempoMinutos.get(subtitulos.posicionResaltado.get(index));
+		double segundos = subtitulos.tiempoSegundos.get(subtitulos.posicionResaltado.get(index));
+		double tiempo = (horas*360)+(minutos*60)+segundos;
+		url = url+"&t="+tiempo+"s";
+		return url;
 	}
 	
 

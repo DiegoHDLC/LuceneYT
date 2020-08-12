@@ -15,6 +15,10 @@ public class YoutubeViewer {
 	
 	Coordinador miCoordinador;
 	public static void main(String[] args) {
+		
+	}
+	
+	public void abrirVentanaYoutube() {
 	    NativeInterface.open();
 	    SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {

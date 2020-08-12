@@ -3,6 +3,7 @@ package controlador;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -188,6 +189,23 @@ public class Coordinador {
 	public void setVentanaYoutube(YoutubeViewer ventanaYoutube) {
 		this.ventanaYoutube = ventanaYoutube;
 		
+	}
+
+	public void ventanaYoutube() {
+		ventanaYoutube.abrirVentanaYoutube();
+		
+	}
+
+	public void abrirURL(String URL) throws URISyntaxException {
+		logica.abrirURL(URL);
+	          
+	    
+		
+	}
+
+	public String convertirTiempoEnLink(int index, Subtitulos subtitulos, String url) {
+		url = logica.convervirTiempoEnLink(index,subtitulos,url);
+		return url;
 	}
 
 	

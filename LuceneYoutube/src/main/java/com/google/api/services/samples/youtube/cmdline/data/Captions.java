@@ -408,14 +408,14 @@ public class Captions {
 
       List<Caption> captions = captionListResponse.getItems();
       // Print information from the API response.
-    // System.out.println("\n================== Returned Caption Tracks ==================\n");
+    //System.out.println("\n================== Returned Caption Tracks ==================\n");
       CaptionSnippet snippet;
       for (Caption caption : captions) {
           snippet = caption.getSnippet();
-        //  System.out.println("  - ID: " + caption.getId());
-          //System.out.println("  - Name: " + snippet.getName());
-          //System.out.println("  - Language: " + snippet.getLanguage());
-       //   System.out.println("\n-------------------------------------------------------------\n");
+      //   System.out.println("  - ID: " + caption.getId());
+        //  System.out.println("  - Name: " + snippet.getName());
+        //  System.out.println("  - Language: " + snippet.getLanguage());
+        //System.out.println("\n-------------------------------------------------------------\n");
       }
 
       return captions;

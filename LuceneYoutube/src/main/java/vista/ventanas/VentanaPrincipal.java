@@ -25,19 +25,27 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 import javax.swing.JTextPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.fredy.jsrt.api.SRTTimeFormat;
 
 import vista.paneles.*;
 
 import javax.swing.SpringLayout;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -153,6 +161,57 @@ public class VentanaPrincipal extends JFrame {
 		
 		
 		table = new JTable();
+		//table.setEnabled(false);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int index = table.getSelectedRow();
+				TableModel model = table.getModel();
+				
+				String tiempoString = model.getValueAt(index, 2).toString();
+				String [] valores = tiempoString.split(":");
+				
+				double horas = Double.parseDouble(valores[0]);
+	        	double minutos = Double.parseDouble(valores[1]);
+	        	NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMANY);
+	        	try {
+					double segundos = nf.parse(valores[2]).doubleValue();
+					int segundosInt = (int) segundos;
+					System.out.println("Segundos enteros: "+segundosInt);
+					
+					System.out.println("Horas: "+horas+" minutos: "+minutos+" segundos: "+segundos);
+					if(segundos>=10000) {
+						segundos = segundos/1000;
+					}else {
+						segundos = segundos/100;
+					}
+					double tiempo = (horas*360)+(minutos*60)+(segundos);
+					System.out.println("tiempo total: "+tiempo+" segundos");
+					double parteDecimal = tiempo % 1;
+					double parteEntera = tiempo - parteDecimal;
+					int tiempoFinal = (int) parteEntera;
+					System.out.println("tiempo a poner en el link: "+tiempoFinal);
+					
+					String url = txtLinkYT.getText()+"&t="+tiempoFinal+"s";
+					miCoordinador.abrirURL(url);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        	
+	        	
+				System.out.println("Valor del index: "+index);
+				//System.out.println(subtitulos.getTiempoHoras().get(subtitulos.getPosicionResaltado().get(0)));
+				//String url = miCoordinador.convertirTiempoEnLink(index,subtitulos
+					//	,txtLinkYT.getText());
+			
+				
+				
+			}
+		});
 		table.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 13));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -221,29 +280,6 @@ public class VentanaPrincipal extends JFrame {
 		});
 		panel1.add(btnNewButton);
 		
-		JButton btnLeerSRT = new JButton("Leer SRT");
-		btnLeerSRT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				
-				try {
-					
-					subtitulos = miCoordinador.leerSRT(panel1, subtitulos);
-					
-					
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				for(int i = 0; i < subtitulos.getListSubtitulos().size(); i++) {
-					miCoordinador.crearDocumento(subtitulos.getListSubtitulos().get(i),i, "txt");
-				}
-				
-			}
-		});
-		sl_panel1.putConstraint(SpringLayout.NORTH, btnLeerSRT, 0, SpringLayout.NORTH, scrollPane_1);
-		sl_panel1.putConstraint(SpringLayout.EAST, btnLeerSRT, 0, SpringLayout.EAST, scrollPane);
-		panel1.add(btnLeerSRT);
 		
 		txtLinkYT = new JTextField();
 		sl_panel1.putConstraint(SpringLayout.NORTH, txtLinkYT, 10, SpringLayout.NORTH, panel1);
@@ -257,14 +293,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton btnCargarVideo = new JButton("Cargar Video");
 		btnCargarVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//ArrayList<Integer> posicion = new ArrayList<Integer>();
-				//ArrayList<String> listaSubtitulos = new ArrayList<String>();
-				//ArrayList<Integer> tiempoHoras = new ArrayList<Integer>();
-				//ArrayList<Integer> tiempoMinutos = new ArrayList<Integer>();
-				//ArrayList<Double> tiempoSegundos = new ArrayList<Double>();
-				//Subtitulos subtitulos = new Subtitulos(posicion, listaSubtitulos, tiempoHoras, tiempoMinutos, tiempoSegundos);
 				String link = txtLinkYT.getText();
-				
 				try {
 					
 					//Borra los archivos de textos anteriores
