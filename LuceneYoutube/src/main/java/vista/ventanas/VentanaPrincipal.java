@@ -13,6 +13,7 @@ import controlador.Coordinador;
 import modelo.Contadores;
 import modelo.Documento;
 import modelo.LuceneSearchHighlighter;
+import modelo.Subtitulos;
 import modelo.LuceneSearchHighlighter;
 
 import javax.swing.JTextField;
@@ -24,6 +25,7 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
@@ -47,9 +49,18 @@ public class VentanaPrincipal extends JFrame {
 	
 	private PanelTexto panel1;
 	public static JLabel lblResaltado ;
-	private JTable table;
+	public static JTable table = new JTable();
 	private JTextField txtRuta;
 	private JTextField txtLinkYT;
+	
+	ArrayList<Integer> posicion = new ArrayList<Integer>();
+	ArrayList<String> listaSubtitulos = new ArrayList<String>();
+	ArrayList<Integer> tiempoHoras = new ArrayList<Integer>();
+	ArrayList<Integer> tiempoMinutos = new ArrayList<Integer>();
+	ArrayList<Double> tiempoSegundos = new ArrayList<Double>();
+	ArrayList<Integer> posicionResaltado = new ArrayList<Integer>();
+	Subtitulos subtitulos = new Subtitulos(posicion, listaSubtitulos, tiempoHoras, 
+			tiempoMinutos, tiempoSegundos, posicionResaltado);
 
 	/**
 	 * Launch the application.
@@ -145,14 +156,15 @@ public class VentanaPrincipal extends JFrame {
 		table.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 13));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
+				{null, null, null},
 			},
 			new String[] {
-				"Ruta", "Cantidad de Palabras", "Tiempo Estimado Lectura"
+				"ID", "Subt\u00EDtulo", "Tiempo"
 			}
 		));
-		table.getColumnModel().getColumn(0).setPreferredWidth(246);
-		table.getColumnModel().getColumn(1).setPreferredWidth(118);
-		table.getColumnModel().getColumn(2).setPreferredWidth(132);
+		table.getColumnModel().getColumn(1).setPreferredWidth(246);
+		table.getColumnModel().getColumn(2).setPreferredWidth(118);
+		//table.getColumnModel().getColumn(2).setPreferredWidth(132);
 		scrollPane.setViewportView(table);
 		
 		JButton btnLeerTexto = new JButton("Leer Texto");
@@ -163,18 +175,18 @@ public class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 					Documento documento;
 					try {
-						miCoordinador.limpiarTabla(table);
+						miCoordinador.eliminarArchivosCarpeta("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados");
+				
 						//Ejecuta el highlither entregando la ruta donde se encuentran las palabras buscadas.
-						documento = miCoordinador.destacarPalabras(txtBuscarPalabras.getText());
+						subtitulos = miCoordinador.destacarPalabras(txtBuscarPalabras.getText(), subtitulos);
 						//Agrega al documento la cantidad de palabras que tienen los archivos donde se encuentran las palabras.
-						documento = miCoordinador.contarPalabras(documento);
+						//documento = miCoordinador.contarPalabras(documento);
+						miCoordinador.limpiarTabla(table);
+						//documento = miCoordinador.calcularTiempoLectura(documento);
+						subtitulos = miCoordinador.agregarDatosFila(table, subtitulos);
 						
-						documento = miCoordinador.calcularTiempoLectura(documento);
-						miCoordinador.agregarDatosFila(table, documento);
 						miCoordinador.leerHTML(textPane);
-						
-						
-						
+
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -213,11 +225,19 @@ public class VentanaPrincipal extends JFrame {
 		JButton btnLeerSRT = new JButton("Leer SRT");
 		btnLeerSRT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<String> listaSubtitulos = new ArrayList<String>();
-				listaSubtitulos = miCoordinador.leerSRT(panel1);
-				for(int i = 0; i < listaSubtitulos.size(); i++) {
+				
+				
+				try {
 					
-					miCoordinador.crearDocumento(listaSubtitulos.get(i),i, "txt");
+					subtitulos = miCoordinador.leerSRT(panel1, subtitulos);
+					
+					
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for(int i = 0; i < subtitulos.getListSubtitulos().size(); i++) {
+					miCoordinador.crearDocumento(subtitulos.getListSubtitulos().get(i),i, "txt");
 				}
 				
 			}
@@ -238,19 +258,31 @@ public class VentanaPrincipal extends JFrame {
 		JButton btnCargarVideo = new JButton("Cargar Video");
 		btnCargarVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<String> listaSubtitulos = new ArrayList<String>();
+				//ArrayList<Integer> posicion = new ArrayList<Integer>();
+				//ArrayList<String> listaSubtitulos = new ArrayList<String>();
+				//ArrayList<Integer> tiempoHoras = new ArrayList<Integer>();
+				//ArrayList<Integer> tiempoMinutos = new ArrayList<Integer>();
+				//ArrayList<Double> tiempoSegundos = new ArrayList<Double>();
+				//Subtitulos subtitulos = new Subtitulos(posicion, listaSubtitulos, tiempoHoras, tiempoMinutos, tiempoSegundos);
 				String link = txtLinkYT.getText();
+				
 				try {
+					
+					//Borra los archivos de textos anteriores
+					miCoordinador.eliminarArchivosCarpeta("E:\\Escritorio\\LuceneFinal\\CaptionsTXT");
+					//Elimina los archivos indexados anteriores
+					miCoordinador.eliminarArchivosCarpeta("E:\\Escritorio\\LuceneFinal\\Index");
 					//Carga el video y descarga los archivos SRT
 					miCoordinador.cargarVideo(link);
 					//convierte el archivo SRT leído en archivos txt donde cada uno es una linea de subtítulo
-					listaSubtitulos = miCoordinador.leerSRT(panel1);
-					for(int i = 0; i < listaSubtitulos.size(); i++) {
-						miCoordinador.crearDocumento(listaSubtitulos.get(i),i, "txt");
+					subtitulos = miCoordinador.leerSRT(panel1, subtitulos);
+					for(int i = 0; i < subtitulos.getListSubtitulos().size(); i++) {
+						miCoordinador.crearDocumento(subtitulos.getListSubtitulos().get(i),i, "txt");
 					}
-					miCoordinador.eliminarIndex();
+					//Indexa los archivos nuevos
 					miCoordinador.escribirIndex();
-				} catch (IOException e) {
+					
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

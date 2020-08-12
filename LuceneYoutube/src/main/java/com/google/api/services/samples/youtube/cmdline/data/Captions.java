@@ -176,13 +176,13 @@ public class Captions {
 			String id = videoId;
 			List<Caption> captions = listCaptions(id);
 			 if (captions.isEmpty()) {
-                 System.out.println("Can't get video caption tracks.");
+                System.out.println("Can't get video caption tracks.");
              } else {
             	 // Retrieve the first uploaded caption track.
                  //String firstCaptionId = captions.get(0).getId();
             	 CaptionSnippet snippet;
             	 String idEN = captions.get(0).getId(); // INGLÉS
-            	 String idES = captions.get(2).getId(); // ESPAÑOL
+            	 //String idES = captions.get(2).getId(); // ESPAÑOL
             	 
                  for (Caption caption : captions) {  
                 	 //snippet = caption.getSnippet();
@@ -191,13 +191,14 @@ public class Captions {
                 	 
                 	 //Se elige el idioma inglés
                 	 if(caption.getId() == idEN) {
-                		 System.out.println("Inglés");
+                	//	 System.out.println("Inglés");
                 		 //System.out.println(videoId);
                 		 downloadCaption(caption.getId(), "en");
-                	 }else if(caption.getId() == idES){
-                		 System.out.println("Español");
-                		 downloadCaption(caption.getId(), "es");
                 	 }
+                	 //}else if(caption.getId() == idES){
+                		//// System.out.println("Español");
+                		 //downloadCaption(caption.getId(), "es");
+                	 //}
                 		 
                 	 
                  }
@@ -281,11 +282,11 @@ public class Captions {
       downloader.setProgressListener(downloadProgressListener);
 
       if(idioma == "es") {
-    	  OutputStream outputFile = new FileOutputStream("E:\\Escritorio\\LuceneTest2\\CaptionsSRT\\CaptionsES.srt");
+    	  OutputStream outputFile = new FileOutputStream("E:\\Escritorio\\LuceneFinal\\CaptionsSRT\\CaptionsES.srt");
     	  // Download the caption track.
           captionDownload.executeAndDownloadTo(outputFile);
       }else if(idioma == "en") {
-    	  OutputStream outputFile = new FileOutputStream("E:\\Escritorio\\LuceneTest2\\CaptionsSRT\\CaptionsEN.srt");
+    	  OutputStream outputFile = new FileOutputStream("E:\\Escritorio\\LuceneFinal\\CaptionsSRT\\CaptionsEN.srt");
     	  // Download the caption track.
           captionDownload.executeAndDownloadTo(outputFile);
       }
@@ -407,14 +408,14 @@ public class Captions {
 
       List<Caption> captions = captionListResponse.getItems();
       // Print information from the API response.
-     System.out.println("\n================== Returned Caption Tracks ==================\n");
+    // System.out.println("\n================== Returned Caption Tracks ==================\n");
       CaptionSnippet snippet;
       for (Caption caption : captions) {
           snippet = caption.getSnippet();
-          System.out.println("  - ID: " + caption.getId());
-          System.out.println("  - Name: " + snippet.getName());
-          System.out.println("  - Language: " + snippet.getLanguage());
-          System.out.println("\n-------------------------------------------------------------\n");
+        //  System.out.println("  - ID: " + caption.getId());
+          //System.out.println("  - Name: " + snippet.getName());
+          //System.out.println("  - Language: " + snippet.getLanguage());
+       //   System.out.println("\n-------------------------------------------------------------\n");
       }
 
       return captions;

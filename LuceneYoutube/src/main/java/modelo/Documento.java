@@ -67,7 +67,7 @@ public class Documento {
 	    try {
 	    	//int j = cantidadDeArchivosHTML() ;
 	    	
-	        BufferedReader in = new BufferedReader(new FileReader("E:\\Escritorio\\LuceneTest2\\Archivos Resaltados\\archivoResaltado["+(j-1)+"].html"));
+	        BufferedReader in = new BufferedReader(new FileReader("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados\\archivoResaltado["+0+"].html"));
 	        String str;
 	        while ((str = in.readLine()) != null) {
 	            content +=str;
@@ -80,13 +80,13 @@ public class Documento {
 	}
 	
 	public static int cantidadDeArchivosHTML() {
-		File carpeta = new File("E:\\Escritorio\\LuceneTest2\\Archivos Resaltados"); 
+		File carpeta = new File("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados"); 
 		File[] lista = carpeta.listFiles();
 		return lista.length;
 	}
 	
 	public static int cantidadDeArchivosTXT() {
-		File carpeta = new File("E:\\Escritorio\\LuceneTest2\\Archivos"); 
+		File carpeta = new File("E:\\Escritorio\\LuceneFinal\\Archivos"); 
 		File[] lista = carpeta.listFiles();
 		return lista.length;
 	}
@@ -102,16 +102,16 @@ public class Documento {
         	
             String data = frag;
             if(formato == "txt") {
-            	 file = new File("E:\\Escritorio\\LuceneTest2\\CaptionsTXT\\subLinea_"+(i+1)+"."+formato);
+            	 file = new File("E:\\Escritorio\\LuceneFinal\\CaptionsTXT\\subLinea_"+(i+1)+"."+formato);
             }else {
-            	file = new File("E:\\Escritorio\\LuceneTest2\\Archivos Resaltados\\archivoResaltado["+i+"]."+formato);
+            	file = new File("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados\\archivoResaltado["+i+"]."+formato);
             }
             
             // Si el archivo no existe, se crea!
             if (!file.exists()) {
                 file.createNewFile();
             }
-            // flag true, indica adjuntar información al archivo.
+            // flag true, indica adjuntar informaciï¿½n al archivo.
             fw = new FileWriter(file.getAbsoluteFile(), true);
             bw = new BufferedWriter(fw);
             bw.write(data);
@@ -137,7 +137,7 @@ public class Documento {
 		area2.setText("");
 		
 		try {
-			File archivo = new File("E:\\Escritorio\\LuceneTest2\\Archivos Resaltados\\archivoResaltado.html");
+			File archivo = new File("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados\\archivoResaltado.html");
 			fr = new FileReader(archivo);
 			BufferedReader br = new BufferedReader(fr);
 			

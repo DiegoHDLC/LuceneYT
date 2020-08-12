@@ -41,7 +41,7 @@ public class LuceneWriteIndexFromFile
         String docsPath = ruta;
          
         //Output folder
-        String indexPath = "E:\\Escritorio\\LuceneTest2\\Index";
+        String indexPath = "E:\\Escritorio\\LuceneFinal\\Index";
  
         //Input Path Variable
         final Path docDir = Paths.get(docsPath);
@@ -56,7 +56,7 @@ public class LuceneWriteIndexFromFile
             Analyzer analyzer = new StandardAnalyzer();
              
             
-            //Configuración del IndexWriter
+            //Configuraciï¿½n del IndexWriter
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
              

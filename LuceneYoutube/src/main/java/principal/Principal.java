@@ -1,6 +1,7 @@
 package principal;
 import vista.paneles.PanelTexto;
 import vista.ventanas.VentanaPrincipal;
+import vista.ventanas.YoutubeViewer;
 
 import java.util.ArrayList;
 
@@ -25,39 +26,35 @@ public class Principal {
 		
 		Coordinador miCoordinador = new Coordinador();
 		PanelTexto panel1 = new PanelTexto();
-		//PDFBoxReadFromFile PDFReader = new PDFBoxReadFromFile();
 		VentanaPrincipal ventana = new VentanaPrincipal();
 		LuceneSearchHighlighter destacadorPalabras = new LuceneSearchHighlighter();
-		//Traductor traduct = new Traductor();
 		Contadores contadores = new Contadores(arrayListInt);
 		Documento documento = new Documento(arrayList, arrayListInt,arrayTMinutos);
 		Logica logica = new Logica();
 		LuceneWriteIndexFromFile escribirIndex = new LuceneWriteIndexFromFile();
 		Captions captions = new Captions();
+		YoutubeViewer ventanaYoutube = new YoutubeViewer();
 		
 		panel1.setCoordinador(miCoordinador);
-		//PDFReader.setCoordinador(miCoordinador);
 		ventana.setCoordinador(miCoordinador);
 		destacadorPalabras.setCoordinador(miCoordinador);
-		//traduct.setCoordinador(miCoordinador);
 		contadores.setCoordinador(miCoordinador);
 		documento.setCoordinador(miCoordinador);
 		logica.setCoordinador(miCoordinador);
 		escribirIndex.setCoordinador(miCoordinador);
 		captions.setCoordinador(miCoordinador);
-		
+		ventanaYoutube.setCoordinador(miCoordinador);
 		
 		
 		miCoordinador.setPanel1(panel1);
-		//miCoordinador.setPDFBoxReadFromFile(PDFReader);
 		miCoordinador.setVentanaPrincipal(ventana);
 		miCoordinador.setLuceneSearchHighlighter(destacadorPalabras);
-		//miCoordinador.setTraductor(traduct);
 		miCoordinador.setContadores(contadores);
 		miCoordinador.setDocumento(documento);
 		miCoordinador.setLogica(logica);
 		miCoordinador.setEscribirIndex(escribirIndex);
 		miCoordinador.setCaptions(captions);
+		miCoordinador.setVentanaYoutube(ventanaYoutube);
 		
 		ventana.setVisible(true);
 	}

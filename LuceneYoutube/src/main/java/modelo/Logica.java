@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -37,20 +41,16 @@ public class Logica {
 		
 	}
 
-	public void agregarDatosAFila(JTable table, Documento documento) {
+	public void agregarDatosAFila(JTable table, Subtitulos subtitulos) {
 		
-		for(int i = 0; i < documento.getRuta().size();i++) {
+		for(int i = 0; i <subtitulos.posicionResaltado.size();i++) {
 			int numCols = table.getModel().getColumnCount();
 			Object [] fila = new Object[numCols]; 
 	        
-			 fila[0] = documento.getRuta().get(i);
-			 fila[1] = documento.getCantPalabras().get(i);
-			 if(documento.getLecturaMinutos().get(i) < 1) {
-				 fila[2] = "< 1 minuto";
-			 }else {
-				 fila[2] = documento.getLecturaMinutos().get(i)+"minuto(s)";
-			 }
-			 //fila[2] = "mundo";
+			 fila[0] = subtitulos.getListSubtitulos().get(subtitulos.posicionResaltado.get(i)-1);
+			 fila[1] = subtitulos.getTiempoHoras().get(subtitulos.posicionResaltado.get(i)-1)+":"+
+			 subtitulos.getTiempoMinutos().get(subtitulos.posicionResaltado.get(i)-1)+":"+
+			 subtitulos.tiempoSegundos.get(subtitulos.posicionResaltado.get(i)-1);
 			 
 			 ((DefaultTableModel) table.getModel()).addRow(fila);
 		}
@@ -69,7 +69,7 @@ public class Logica {
 	       chooser.setAcceptAllFileFilterUsed(false);
 	       //    
 	       if (chooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
-	    	 eliminarIndex();
+	    	 eliminarArchivosCarpeta("E:\\Escritorio\\LuceneFinal\\Index");
 	         System.out.println("getCurrentDirectory(): " 
 	            +  chooser.getCurrentDirectory());
 	         System.out.println("getSelectedFile() : " 
@@ -107,6 +107,7 @@ public class Logica {
 	}
 
 	public void limpiarTabla(JTable table) {
+		System.out.println("ENTRA A LIMPIAR");
 		try {
             DefaultTableModel modelo=(DefaultTableModel) table.getModel();
             int filas=table.getRowCount();
@@ -119,8 +120,8 @@ public class Logica {
 		
 	}
 
-	public void eliminarIndex() {
-		File file = new File("E:\\Escritorio\\LuceneTest2\\Index");      
+	public void eliminarArchivosCarpeta(String directorioCarpeta) {
+		File file = new File(directorioCarpeta);      
 	      String[] myFiles;    
 	          if(file.isDirectory()){
 	              myFiles = file.list();
@@ -132,35 +133,52 @@ public class Logica {
 		
 	}
 
-	public ArrayList<String> leerSRT(PanelTexto panel1) {
-		ArrayList<String> listaSubtitulos = new ArrayList<String>();
-		SRTInfo info = SRTReader.read(new File("E:\\Escritorio\\LuceneTest2\\CaptionsSRT\\CaptionsEN.srt"));
-		listaSubtitulos = print(info);
+	public Subtitulos leerSRT(PanelTexto panel1, Subtitulos subtitulos) throws ParseException {
+		Subtitulos sub;
+		SRTInfo info = SRTReader.read(new File("E:\\Escritorio\\LuceneFinal\\CaptionsSRT\\CaptionsEN.srt"));
+		sub = print(info, subtitulos);
 		
-		for(int i = 0; i < listaSubtitulos.size(); i++) {
-			System.out.println(i+" "+listaSubtitulos.get(i));
-		}
-		
-		return listaSubtitulos;
-	
-	 
+		//for(int i = 0; i < listaSubtitulos.size(); i++) {
+			//System.out.println(i+" "+listaSubtitulos.get(i));
+		//}
+
+		return sub;
 	}
 	
-	private static ArrayList<String> print(SRTInfo info) {
+	private static Subtitulos print(SRTInfo info, Subtitulos subtitulos) throws ParseException {
 		ArrayList<String> listaSubtitulos = new ArrayList<String>();
         for (SRT s : info) {
-            System.out.println("Number: " + s.number);
-            System.out.println("Start time: " + SRTTimeFormat.format(s.startTime));
-            System.out.println("End time: " + SRTTimeFormat.format(s.endTime));
-            System.out.println("Texts:");
+        	//subtitulos.posicion.add(s.number);
+        	String tiempoString = SRTTimeFormat.format(s.startTime);
+        	
+        	String [] valores = tiempoString.split(":");
+        	
+        	int hora = Integer.parseInt(valores[0]);
+        	int minutos = Integer.parseInt(valores[1]);
+        	NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMANY);
+        	double segundos = nf.parse(valores[2]).doubleValue();
+        	
+        	
+        	//System.out.println("valores del string: "+hora +" - "+minutos + " - "+segundos);
+        	
+        	subtitulos.tiempoHoras.add(hora);
+        	subtitulos.tiempoMinutos.add(minutos);
+        	subtitulos.tiempoSegundos.add(segundos);
+        	//subtitulos.tiempoMinutos.add(SRTTimeFormat.format(s.startTime));
+           // System.out.println("Number: " + s.number);
+            //System.out.println("Start time: " + SRTTimeFormat.format(s.startTime));
+           // System.out.println("End time: " + SRTTimeFormat.format(s.endTime));
+           // System.out.println("Texts:");
             for (String line : s.text) {
             	listaSubtitulos.add(line);
-                System.out.println("    " + line);
+            	subtitulos.listSubtitulos.add(line);
+            	//subtitulos.listSubtitulos.add(line);
+               // System.out.println("    " + line);
             }
-            System.out.println();
+           // System.out.println();
         }
 		
-        return listaSubtitulos;
+        return subtitulos;
 	}
 	
 

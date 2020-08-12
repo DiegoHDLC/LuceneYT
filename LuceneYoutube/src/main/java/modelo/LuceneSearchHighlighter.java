@@ -8,6 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -47,7 +51,7 @@ public class LuceneSearchHighlighter
 
 	
     //This contains the lucene indexed documents
-    private static final String INDEX_DIR = "E:\\Escritorio\\LuceneTest2\\Index";
+    private static final String INDEX_DIR = "E:\\Escritorio\\LuceneFinal\\Index";
 	private static ArrayList<String[]> listaFrags;
 	
 
@@ -57,7 +61,7 @@ public class LuceneSearchHighlighter
     {
     
     }
-    public static Documento ejecutarHighlighter(String txtBuscarPalabras) throws Exception {
+    public static Subtitulos ejecutarHighlighter(String txtBuscarPalabras, Subtitulos subtitulos) throws Exception {
     	
     	listaFrags = null;
         
@@ -127,6 +131,12 @@ public class LuceneSearchHighlighter
             
             System.out.println("Path " + " : " + title);
             
+            String str = title;
+            str = str.replaceAll("[^-?0-9+]", " "); 
+            List<String> lista = Arrays.asList(str.trim().split(" "));
+            int posicion = Integer.parseInt(lista.get(0));
+            System.out.println("Número de posicion: "+posicion);
+            subtitulos.posicionResaltado.add(posicion);
              
             //Obtiene el texto almacenado desde el documento
             
@@ -146,16 +156,18 @@ public class LuceneSearchHighlighter
                 System.out.println("=======================");
                 
                 System.out.println(frag);
-               //miCoordinador.crearDocumento(frag + "<br>","html");
+                //miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion-1) + "<br>", 0, "html");
+               miCoordinador.crearDocumento(frag + "<br>",0,"html");
+               miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion) + "<br><br>", 0, "html");
                //miCoordinador.crearDocumento("<br>", "html");
                //miCoordinador.crearDocumento(frag, "txt");
       
             }
         }
-        Documento.i++;
-        Documento.j++;
+  
         dir.close();
-        return documento; 
+        
+        return subtitulos; 
         
     }
     
@@ -174,6 +186,17 @@ public class LuceneSearchHighlighter
     		System.out.println(listaFrags.get(i)+"");
     	}
     }
+    
+    public static String getMatchId(String ruta) {
+    	String pattern = "(\\d)";
+    	Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(ruta); //url is youtube url for which you want to extract the id.
+        if (matcher.find()) {
+             return matcher.group();
+        }
+		return matcher.group();
+    }
+   
 
 	
 	

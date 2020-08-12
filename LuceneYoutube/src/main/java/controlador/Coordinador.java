@@ -3,6 +3,7 @@ package controlador;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JEditorPane;
@@ -20,9 +21,11 @@ import modelo.Documento;
 import modelo.Logica;
 import modelo.LuceneSearchHighlighter;
 import modelo.LuceneWriteIndexFromFile;
+import modelo.Subtitulos;
 //import modelo.PDFBoxReadFromFile;
 //import modelo.Traductor;
 import vista.ventanas.VentanaPrincipal;
+import vista.ventanas.YoutubeViewer;
 
 public class Coordinador {
 	
@@ -37,6 +40,7 @@ public class Coordinador {
 	private Logica logica;
 	private LuceneWriteIndexFromFile escribirIndex;
 	private Captions captions;
+	private YoutubeViewer ventanaYoutube;
 	
 	public Coordinador() {
 		
@@ -100,10 +104,10 @@ public class Coordinador {
 	}
 
 	@SuppressWarnings("static-access")
-	public Documento destacarPalabras(String txtBuscarPalabras) throws Exception {
+	public Subtitulos destacarPalabras(String txtBuscarPalabras, Subtitulos subtitulos) throws Exception {
 		Documento documento;
-		documento = destacadorPalabras.ejecutarHighlighter(txtBuscarPalabras);
-		return documento;
+		subtitulos = destacadorPalabras.ejecutarHighlighter(txtBuscarPalabras, subtitulos);
+		return subtitulos;
 		
 	}
 
@@ -120,9 +124,11 @@ public class Coordinador {
 		return documento;
 	}
 
-	public void agregarDatosFila(JTable table, Documento documento) {
-		logica.agregarDatosAFila(table, documento);
-		
+	public Subtitulos agregarDatosFila(JTable table, Subtitulos subtitulos) {
+		limpiarTabla(table);
+		logica.agregarDatosAFila(table, subtitulos);
+		subtitulos.getPosicionResaltado().clear();
+		return subtitulos;
 	}
 
 	public void leerHTML(JTextPane textPane) {
@@ -152,15 +158,15 @@ public class Coordinador {
 		
 	}
 
-	public void eliminarIndex() {
-		logica.eliminarIndex();
+	public void eliminarArchivosCarpeta(String directorioCarpeta) {
+		logica.eliminarArchivosCarpeta(directorioCarpeta);
 		
 	}
 
-	public ArrayList<String> leerSRT(PanelTexto panel1) {
-		ArrayList<String> listaSubtitulos = new ArrayList<String>();
-		listaSubtitulos = logica.leerSRT(panel1);
-		return listaSubtitulos;
+	public Subtitulos leerSRT(PanelTexto panel1, Subtitulos subtitulos) throws ParseException {
+		Subtitulos sub;
+		sub = logica.leerSRT(panel1, subtitulos);
+		return sub;
 	}
 
 	public void setCaptions(Captions captions) {
@@ -175,7 +181,12 @@ public class Coordinador {
 	}
 
 	public void escribirIndex() {
-		escribirIndex.escribirIndexDesdeArchivo("E:\\Escritorio\\LuceneTest2\\CaptionsTXT");
+		escribirIndex.escribirIndexDesdeArchivo("E:\\Escritorio\\LuceneFinal\\CaptionsTXT");
+		
+	}
+
+	public void setVentanaYoutube(YoutubeViewer ventanaYoutube) {
+		this.ventanaYoutube = ventanaYoutube;
 		
 	}
 
