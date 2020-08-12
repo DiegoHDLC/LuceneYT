@@ -41,7 +41,7 @@ public class YoutubeViewer {
 	    JWebBrowser webBrowser = new JWebBrowser();
 	    webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
 	    webBrowser.setBarsVisible(false);
-	    webBrowser.navigate("https://www.youtube.com/watch?v=l5nxzSVlxKc");
+	    webBrowser.navigate("https://www.youtube.com/watch?v=nykOeWgQcHM");
 	    return webBrowserPanel;
 	}
 

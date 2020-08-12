@@ -117,6 +117,7 @@ public class LuceneSearchHighlighter
         ArrayList<Double> arrayTMinutos = new ArrayList<Double>();
         
         Documento documento = new Documento(arrayRuta, arrayCantPal, arrayTMinutos);
+        int contador = 1;
         //Iterar sobre los resultados encontrados
         for (int i = 0; i < hits.scoreDocs.length; i++) 
         {
@@ -149,7 +150,7 @@ public class LuceneSearchHighlighter
           
             //obtiene los fragmentos de texto resaltados
             String[] frags = highlighter.getBestFragments(stream, text, 40);
-           
+            
             for (String frag : frags) 
             {
             	
@@ -157,8 +158,9 @@ public class LuceneSearchHighlighter
                 
                 System.out.println(frag);
                 //miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion-1) + "<br>", 0, "html");
-               miCoordinador.crearDocumento(frag + "<br>",0,"html");
+               miCoordinador.crearDocumento(contador+".-"+frag + "<br>",0,"html");
                miCoordinador.crearDocumento(subtitulos.listSubtitulos.get(posicion) + "<br><br>", 0, "html");
+               contador++;
                //miCoordinador.crearDocumento("<br>", "html");
                //miCoordinador.crearDocumento(frag, "txt");
       
