@@ -46,9 +46,9 @@ public class Logica {
 		for(int i = 0; i <subtitulos.posicionResaltado.size();i++) {
 			int numCols = table.getModel().getColumnCount();
 			Object [] fila = new Object[numCols]; 
-	        
-			 fila[0] = subtitulos.getListSubtitulos().get(subtitulos.posicionResaltado.get(i)-1);
-			 fila[1] = subtitulos.getTiempoHoras().get(subtitulos.posicionResaltado.get(i)-1)+":"+
+	         fila[0] = i+1;
+			 fila[1] = subtitulos.getListSubtitulos().get(subtitulos.posicionResaltado.get(i)-1);
+			 fila[2] = subtitulos.getTiempoHoras().get(subtitulos.posicionResaltado.get(i)-1)+":"+
 			 subtitulos.getTiempoMinutos().get(subtitulos.posicionResaltado.get(i)-1)+":"+
 			 subtitulos.tiempoSegundos.get(subtitulos.posicionResaltado.get(i)-1);
 			 

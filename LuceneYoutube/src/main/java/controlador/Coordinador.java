@@ -125,7 +125,7 @@ public class Coordinador {
 	}
 
 	public Subtitulos agregarDatosFila(JTable table, Subtitulos subtitulos) {
-		limpiarTabla(table);
+		//limpiarTabla(table);
 		logica.agregarDatosAFila(table, subtitulos);
 		subtitulos.getPosicionResaltado().clear();
 		return subtitulos;

@@ -156,7 +156,6 @@ public class VentanaPrincipal extends JFrame {
 		table.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 13));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null},
 			},
 			new String[] {
 				"ID", "Subt\u00EDtulo", "Tiempo"
