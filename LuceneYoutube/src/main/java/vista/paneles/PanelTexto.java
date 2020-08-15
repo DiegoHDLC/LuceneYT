@@ -20,10 +20,6 @@ public class PanelTexto extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		
-	public PanelTexto() {
-		setLayout(null);
-		
-	}
 
 	public void setCoordinador(Coordinador miCoordinador) {
 		this.miCoordinador = miCoordinador;

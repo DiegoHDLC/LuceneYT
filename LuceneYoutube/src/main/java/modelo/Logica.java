@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Driver;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -12,18 +13,26 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.fredy.jsrt.api.SRT;
 import org.fredy.jsrt.api.SRTInfo;
 import org.fredy.jsrt.api.SRTReader;
 import org.fredy.jsrt.api.SRTTimeFormat;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import vista.paneles.*;
+import vista.ventanas.StationFinderAutoComplete;
 import controlador.Coordinador;
 
 public class Logica {
@@ -182,6 +191,7 @@ public class Logica {
 	}
 
 	public void abrirURL(String URL) throws java.net.URISyntaxException {
+		
 		 if (java.awt.Desktop.isDesktopSupported()) {
 	            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
 
@@ -194,10 +204,9 @@ public class Logica {
 	                }
 	            }
 	        }
-		
 	}
 
-	public String convervirTiempoEnLink(int index, Subtitulos subtitulos, String url) {
+	/*public String convervirTiempoEnLink(int index, Subtitulos subtitulos, String url) {
 		System.out.println("Valor index en conversor: "+index);
 		System.out.println("Valor de la posicion Resaltado: "+subtitulos.posicionResaltado.get(index));
 		double horas = subtitulos.tiempoHoras.get(subtitulos.posicionResaltado.get(index));
@@ -206,7 +215,61 @@ public class Logica {
 		double tiempo = (horas*360)+(minutos*60)+segundos;
 		url = url+"&t="+tiempo+"s";
 		return url;
-	}
+	}*/
 	
+
+	public String convertirTiempoEnLink(JTable table, JTextField txtLinkYT ) throws ParseException {
+		int index = table.getSelectedRow();
+		TableModel model = table.getModel();
+		
+		String tiempoString = model.getValueAt(index, 2).toString();
+		String [] valores = tiempoString.split(":");
+		
+		double horas = Double.parseDouble(valores[0]);
+    	double minutos = Double.parseDouble(valores[1]);
+    	NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMANY);
+    	
+			double segundos = nf.parse(valores[2]).doubleValue();
+			int segundosInt = (int) segundos;
+			System.out.println("Segundos enteros: "+segundosInt);
+			
+			System.out.println("Horas: "+horas+" minutos: "+minutos+" segundos: "+segundos);
+			if(segundos>=10000) {
+				segundos = segundos/1000;
+			}else { 
+				if(segundos >=1000){
+					segundos = segundos/100;
+				}
+				else {
+					if(segundos >= 100) {
+					segundos = segundos/10;
+					}
+				}
+			}
+			double tiempo = (horas*360)+(minutos*60)+(segundos);
+			System.out.println("tiempo total: "+tiempo+" segundos");
+			double parteDecimal = tiempo % 1;
+			double parteEntera = tiempo - parteDecimal;
+			int tiempoFinal = (int) parteEntera;
+			System.out.println("tiempo a poner en el link: "+tiempoFinal);
+				
+			String url = txtLinkYT.getText()+"&t="+tiempoFinal+"s";
+			
+			return url;
+		
+	}
+
+	/*public void hiloAutocompletado(final JComboBox comboBox, final Object[] elements) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	AutoCompleteSupport autocomplete = AutoCompleteSupport.install(comboBox, GlazedLists.eventListOf(elements));
+        		autocomplete.setFilterMode(TextMatcherEditor.CONTAINS);
+            }
+        });
+		
+		
+	}
+	*/
 
 }

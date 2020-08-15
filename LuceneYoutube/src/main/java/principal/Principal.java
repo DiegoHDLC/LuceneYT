@@ -1,14 +1,20 @@
 package principal;
 import vista.paneles.PanelTexto;
+import vista.ventanas.StationFinderAutoComplete;
 import vista.ventanas.VentanaPrincipal;
 import vista.ventanas.YoutubeViewer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.UIManager;
 
 import com.google.api.services.samples.youtube.cmdline.data.Captions;
 
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import controlador.Coordinador;
 import modelo.Contadores;
 import modelo.Documento;
@@ -19,14 +25,19 @@ import modelo.LuceneWriteIndexFromFile;
 public class Principal {
 	public  static void main(String[] args) throws Exception {
 		
+		
+			
+			
+		
+           
 		javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		ArrayList<String> arrayList = null;
 		ArrayList<Integer> arrayListInt = null;
 		ArrayList<Double> arrayTMinutos = null;
 		
 		Coordinador miCoordinador = new Coordinador();
-		PanelTexto panel1 = new PanelTexto();
-		VentanaPrincipal ventana = new VentanaPrincipal();
+		
+		
 		LuceneSearchHighlighter destacadorPalabras = new LuceneSearchHighlighter();
 		Contadores contadores = new Contadores(arrayListInt);
 		Documento documento = new Documento(arrayList, arrayListInt,arrayTMinutos);
@@ -34,8 +45,9 @@ public class Principal {
 		LuceneWriteIndexFromFile escribirIndex = new LuceneWriteIndexFromFile();
 		Captions captions = new Captions();
 		YoutubeViewer ventanaYoutube = new YoutubeViewer();
+		VentanaPrincipal ventana = new VentanaPrincipal();
 		
-		panel1.setCoordinador(miCoordinador);
+		
 		ventana.setCoordinador(miCoordinador);
 		destacadorPalabras.setCoordinador(miCoordinador);
 		contadores.setCoordinador(miCoordinador);
@@ -46,7 +58,7 @@ public class Principal {
 		ventanaYoutube.setCoordinador(miCoordinador);
 		
 		
-		miCoordinador.setPanel1(panel1);
+		
 		miCoordinador.setVentanaPrincipal(ventana);
 		miCoordinador.setLuceneSearchHighlighter(destacadorPalabras);
 		miCoordinador.setContadores(contadores);
@@ -57,5 +69,28 @@ public class Principal {
 		miCoordinador.setVentanaYoutube(ventanaYoutube);
 		
 		ventana.setVisible(true);
+		
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			
+			public void run() {
+				try {
+					
+					
+					
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+				
+				
+			
+		
+		
+		
+		
 	}
 }

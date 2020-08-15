@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -14,6 +15,9 @@ import javax.swing.JTextPane;
 
 import com.google.api.services.samples.youtube.cmdline.data.Captions;
 
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import vista.paneles.*;
 
 import jdk.nashorn.internal.runtime.ListAdapter;
@@ -203,9 +207,16 @@ public class Coordinador {
 		
 	}
 
-	public String convertirTiempoEnLink(int index, Subtitulos subtitulos, String url) {
-		url = logica.convervirTiempoEnLink(index,subtitulos,url);
+	public String convertirTiempoEnLink(JTable table, JTextField txtLinkYT) throws ParseException {
+		String url;
+		url = logica.convertirTiempoEnLink(table, txtLinkYT);
+		//url = logica.convervirTiempoEnLink(index,subtitulos,url);
 		return url;
+	}
+
+	public JComboBox hiloAutocopletado(JComboBox comboBox, Object[] elements) {
+		//logica.hiloAutocompletado(comboBox, elements);
+		return comboBox;
 	}
 
 	
