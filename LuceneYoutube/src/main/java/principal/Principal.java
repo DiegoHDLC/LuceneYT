@@ -2,7 +2,7 @@ package principal;
 import vista.paneles.PanelTexto;
 import vista.ventanas.StationFinderAutoComplete;
 import vista.ventanas.VentanaPrincipal;
-import vista.ventanas.YoutubeViewer;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class Principal {
 		Logica logica = new Logica();
 		LuceneWriteIndexFromFile escribirIndex = new LuceneWriteIndexFromFile();
 		Captions captions = new Captions();
-		YoutubeViewer ventanaYoutube = new YoutubeViewer();
+	
 		VentanaPrincipal ventana = new VentanaPrincipal();
 		
 		
@@ -55,7 +55,7 @@ public class Principal {
 		logica.setCoordinador(miCoordinador);
 		escribirIndex.setCoordinador(miCoordinador);
 		captions.setCoordinador(miCoordinador);
-		ventanaYoutube.setCoordinador(miCoordinador);
+		
 		
 		
 		
@@ -66,7 +66,6 @@ public class Principal {
 		miCoordinador.setLogica(logica);
 		miCoordinador.setEscribirIndex(escribirIndex);
 		miCoordinador.setCaptions(captions);
-		miCoordinador.setVentanaYoutube(ventanaYoutube);
 		
 		ventana.setVisible(true);
 		

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
@@ -30,7 +31,7 @@ import modelo.Subtitulos;
 //import modelo.PDFBoxReadFromFile;
 //import modelo.Traductor;
 import vista.ventanas.VentanaPrincipal;
-import vista.ventanas.YoutubeViewer;
+
 
 public class Coordinador {
 	
@@ -45,7 +46,7 @@ public class Coordinador {
 	private Logica logica;
 	private LuceneWriteIndexFromFile escribirIndex;
 	private Captions captions;
-	private YoutubeViewer ventanaYoutube;
+
 	
 	public Coordinador() {
 		
@@ -109,9 +110,9 @@ public class Coordinador {
 	}
 
 	@SuppressWarnings("static-access")
-	public Subtitulos destacarPalabras(String txtBuscarPalabras, Subtitulos subtitulos) throws Exception {
+	public Subtitulos destacarPalabras(Object comboBox, Subtitulos subtitulos) throws Exception {
 		Documento documento;
-		subtitulos = destacadorPalabras.ejecutarHighlighter(txtBuscarPalabras, subtitulos);
+		subtitulos = destacadorPalabras.ejecutarHighlighter(comboBox, subtitulos);
 		return subtitulos;
 		
 	}
@@ -190,16 +191,6 @@ public class Coordinador {
 		
 	}
 
-	public void setVentanaYoutube(YoutubeViewer ventanaYoutube) {
-		this.ventanaYoutube = ventanaYoutube;
-		
-	}
-
-	public void ventanaYoutube() {
-		ventanaYoutube.abrirVentanaYoutube();
-		
-	}
-
 	public void abrirURL(String URL) throws URISyntaxException {
 		logica.abrirURL(URL);
 	          
@@ -217,6 +208,12 @@ public class Coordinador {
 	public JComboBox hiloAutocopletado(JComboBox comboBox, Object[] elements) {
 		//logica.hiloAutocompletado(comboBox, elements);
 		return comboBox;
+	}
+
+	public List<Object> obtenerCantidadPalabras(int size) throws FileNotFoundException, IOException {
+		
+		List<Object> totalPalabras = logica.obtenerCantidadPalabras(size);
+		return totalPalabras;
 	}
 
 	

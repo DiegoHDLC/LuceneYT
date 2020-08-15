@@ -2,14 +2,19 @@ package modelo;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.sql.Driver;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -39,6 +44,7 @@ public class Logica {
 	DefaultTableModel modelo = new DefaultTableModel();
 	JFileChooser chooser;
 	String choosertitle;
+	static String [] palabras;
 	//JTable table = new JTable(modelo);
 	
 	public Logica() {
@@ -54,12 +60,14 @@ public class Logica {
 		
 		for(int i = 0; i <subtitulos.posicionResaltado.size();i++) {
 			int numCols = table.getModel().getColumnCount();
+			double segundos = subtitulos.tiempoSegundos.get(subtitulos.posicionResaltado.get(i)-1);
+			int segundosInt = (int) segundos;
 			Object [] fila = new Object[numCols]; 
 	         fila[0] = i+1;
 			 fila[1] = subtitulos.getListSubtitulos().get(subtitulos.posicionResaltado.get(i)-1);
 			 fila[2] = subtitulos.getTiempoHoras().get(subtitulos.posicionResaltado.get(i)-1)+":"+
 			 subtitulos.getTiempoMinutos().get(subtitulos.posicionResaltado.get(i)-1)+":"+
-			 subtitulos.tiempoSegundos.get(subtitulos.posicionResaltado.get(i)-1);
+			 segundosInt;
 			 
 			 ((DefaultTableModel) table.getModel()).addRow(fila);
 		}
@@ -227,25 +235,29 @@ public class Logica {
 		
 		double horas = Double.parseDouble(valores[0]);
     	double minutos = Double.parseDouble(valores[1]);
-    	NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMANY);
-    	
-			double segundos = nf.parse(valores[2]).doubleValue();
-			int segundosInt = (int) segundos;
-			System.out.println("Segundos enteros: "+segundosInt);
+    	double segundos = Double.parseDouble(valores[2]);
+    	//String [] valoresSegundos = valores[2].split(".");
+    	//int segundos = Integer.parseInt(valoresSegundos[0]);
+    	//NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMANY);
+    		
+			//double segundos = nf.parse(valores[2]).intValue();
+    		//int segundos = Integer.parseInt(valores[2]);
+			//int segundosInt = (int) segundos;
+			//System.out.println("Segundos enteros: "+segundosInt);
 			
 			System.out.println("Horas: "+horas+" minutos: "+minutos+" segundos: "+segundos);
-			if(segundos>=10000) {
-				segundos = segundos/1000;
+			/*if(segundos>=10000) {
+				segundosInt = (int)segundosInt/1000;
 			}else { 
 				if(segundos >=1000){
-					segundos = segundos/100;
+					segundosInt = (int)segundosInt/100;
 				}
 				else {
 					if(segundos >= 100) {
-					segundos = segundos/10;
+						segundosInt = (int) segundosInt/10;
 					}
 				}
-			}
+			}*/
 			double tiempo = (horas*360)+(minutos*60)+(segundos);
 			System.out.println("tiempo total: "+tiempo+" segundos");
 			double parteDecimal = tiempo % 1;
@@ -257,6 +269,35 @@ public class Logica {
 			
 			return url;
 		
+	}
+
+	public List<Object> obtenerCantidadPalabras(int size) throws FileNotFoundException, IOException {
+		String line;
+		List<Object> TotalPalabras = new ArrayList<Object>();
+		
+			for(int i=1; i <= size; i++) {
+				try (
+				    InputStream fis = new FileInputStream("E:\\Escritorio\\LuceneFinal\\CaptionsTXT\\subLinea_"+i+".txt");
+				    InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
+				    BufferedReader br = new BufferedReader(isr);
+				) {
+					
+				    while ((line = br.readLine()) != null) {
+				    	palabras = line.split(" ");
+				    	for(int k = 0; k < palabras.length; k++) {
+				    		TotalPalabras.add(palabras[k]);
+				    	}
+				    	//System.out.println("-------------------");
+				    	
+				    }
+				    
+				    
+				}
+			}
+			for(int i = 0; i < TotalPalabras.size();i++) {
+				System.out.println("Total de palabras: "+TotalPalabras.get(i));
+			}
+		return TotalPalabras;
 	}
 
 	/*public void hiloAutocompletado(final JComboBox comboBox, final Object[] elements) {

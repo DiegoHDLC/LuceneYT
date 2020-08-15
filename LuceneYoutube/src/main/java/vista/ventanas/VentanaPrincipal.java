@@ -32,7 +32,9 @@ import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
@@ -60,6 +62,8 @@ import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -72,12 +76,15 @@ public class VentanaPrincipal extends JFrame {
 	static Object[] elements;
 	
 	
+	List<Object> listaTotalPalabras = new ArrayList<Object>();
+	
+	
 	private PanelTexto panel1;
 	public static JLabel lblResaltado ;
 	public static JTable table = new JTable();
 	private JTextField txtLinkYT;
 	
-	EventList<Object> autocompletado;
+	EventList<Object> autocomplete;
 	
 	ArrayList<Integer> posicion = new ArrayList<Integer>();
 	ArrayList<String> listaSubtitulos = new ArrayList<String>();
@@ -97,12 +104,14 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 * @throws InterruptedException 
 	 * @throws InvocationTargetException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public VentanaPrincipal() throws InvocationTargetException, InterruptedException {
+	public VentanaPrincipal() throws InvocationTargetException, InterruptedException, FileNotFoundException, IOException {
 		initComponents();
 	}
 	
-	private void initComponents() throws InvocationTargetException, InterruptedException {
+	private void initComponents() throws InvocationTargetException, InterruptedException, FileNotFoundException, IOException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 944, 626);
@@ -112,12 +121,6 @@ public class VentanaPrincipal extends JFrame {
 		SpringLayout sl_panel1 = new SpringLayout();
 		panel1.setLayout(sl_panel1);
 		
-		final JTextField txtBuscarPalabras = new JTextField();
-		sl_panel1.putConstraint(SpringLayout.WEST, txtBuscarPalabras, 200, SpringLayout.WEST, panel1);
-		txtBuscarPalabras.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 13));
-		panel1.add(txtBuscarPalabras);
-		txtBuscarPalabras.setColumns(10);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		sl_panel1.putConstraint(SpringLayout.NORTH, scrollPane, 428, SpringLayout.NORTH, panel1);
 		sl_panel1.putConstraint(SpringLayout.WEST, scrollPane, 50, SpringLayout.WEST, panel1);
@@ -126,7 +129,6 @@ public class VentanaPrincipal extends JFrame {
 		panel1.add(scrollPane);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		sl_panel1.putConstraint(SpringLayout.SOUTH, txtBuscarPalabras, -24, SpringLayout.NORTH, scrollPane_1);
 		sl_panel1.putConstraint(SpringLayout.NORTH, scrollPane_1, 207, SpringLayout.NORTH, panel1);
 		sl_panel1.putConstraint(SpringLayout.SOUTH, scrollPane_1, -34, SpringLayout.NORTH, scrollPane);
 		sl_panel1.putConstraint(SpringLayout.WEST, scrollPane_1, 50, SpringLayout.WEST, panel1);
@@ -142,19 +144,15 @@ public class VentanaPrincipal extends JFrame {
 		sl_panel1.putConstraint(SpringLayout.SOUTH, textPane, -16, SpringLayout.NORTH, scrollPane);
 		
 		comboBox = new JComboBox();
+		comboBox.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		sl_panel1.putConstraint(SpringLayout.WEST, comboBox, 200, SpringLayout.WEST, panel1);
+		sl_panel1.putConstraint(SpringLayout.SOUTH, comboBox, -24, SpringLayout.NORTH, scrollPane_1);
 		
-		elements = new Object[] {"Cat", "Dog", "Lion", "Mouse"};
 		
-		
-		Runnable doHelloWorld = new Runnable() {
-		     public void run() {
-		    	 AutoCompleteSupport autocomplete = AutoCompleteSupport.install(comboBox, GlazedLists.eventListOf(elements));
-	        		autocomplete.setFilterMode(TextMatcherEditor.CONTAINS);
-		         System.out.println("Hello World on " + Thread.currentThread());
-		     }
-		 	
-		 };
-		 SwingUtilities.invokeLater(doHelloWorld);
 		panel1.add(comboBox);
 		 
 		
@@ -193,9 +191,10 @@ public class VentanaPrincipal extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JButton btnLeerTexto = new JButton("Leer Texto");
-		sl_panel1.putConstraint(SpringLayout.EAST, txtBuscarPalabras, -28, SpringLayout.WEST, btnLeerTexto);
-		sl_panel1.putConstraint(SpringLayout.WEST, btnLeerTexto, 662, SpringLayout.WEST, panel1);
-		sl_panel1.putConstraint(SpringLayout.SOUTH, btnLeerTexto, -34, SpringLayout.NORTH, scrollPane_1);
+		sl_panel1.putConstraint(SpringLayout.EAST, comboBox, 0, SpringLayout.WEST, btnLeerTexto);
+		sl_panel1.putConstraint(SpringLayout.SOUTH, btnLeerTexto, 0, SpringLayout.SOUTH, comboBox);
+		sl_panel1.putConstraint(SpringLayout.NORTH, btnLeerTexto, 0, SpringLayout.NORTH, comboBox);
+		sl_panel1.putConstraint(SpringLayout.WEST, btnLeerTexto, -294, SpringLayout.EAST, panel1);
 		sl_panel1.putConstraint(SpringLayout.EAST, btnLeerTexto, -144, SpringLayout.EAST, panel1);
 		btnLeerTexto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -204,7 +203,7 @@ public class VentanaPrincipal extends JFrame {
 						miCoordinador.eliminarArchivosCarpeta("E:\\Escritorio\\LuceneFinal\\Archivos Resaltados");
 				
 						//Ejecuta el highlither entregando la ruta donde se encuentran las palabras buscadas.
-						subtitulos = miCoordinador.destacarPalabras(txtBuscarPalabras.getText(), subtitulos);
+						subtitulos = miCoordinador.destacarPalabras(comboBox.getSelectedItem(), subtitulos);
 						//Agrega al documento la cantidad de palabras que tienen los archivos donde se encuentran las palabras.
 						//documento = miCoordinador.contarPalabras(documento);
 						miCoordinador.limpiarTabla(table);
@@ -223,29 +222,27 @@ public class VentanaPrincipal extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					
-			
+
 			}
 		});
 		panel1.add(btnLeerTexto);
 		
 		
 		txtLinkYT = new JTextField();
-		sl_panel1.putConstraint(SpringLayout.NORTH, txtBuscarPalabras, 41, SpringLayout.SOUTH, txtLinkYT);
+		sl_panel1.putConstraint(SpringLayout.NORTH, comboBox, 39, SpringLayout.SOUTH, txtLinkYT);
+		sl_panel1.putConstraint(SpringLayout.NORTH, txtLinkYT, 62, SpringLayout.NORTH, panel1);
 		sl_panel1.putConstraint(SpringLayout.WEST, txtLinkYT, 200, SpringLayout.WEST, panel1);
 		sl_panel1.putConstraint(SpringLayout.EAST, txtLinkYT, -294, SpringLayout.EAST, panel1);
-		sl_panel1.putConstraint(SpringLayout.NORTH, txtLinkYT, 62, SpringLayout.NORTH, panel1);
 		txtLinkYT.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 13));
 		txtLinkYT.setColumns(10);
 		panel1.add(txtLinkYT);
 		
 		JButton btnCargarVideo = new JButton("Cargar Video");
-		sl_panel1.putConstraint(SpringLayout.NORTH, btnLeerTexto, 49, SpringLayout.SOUTH, btnCargarVideo);
-		sl_panel1.putConstraint(SpringLayout.WEST, btnCargarVideo, 28, SpringLayout.EAST, txtLinkYT);
+		sl_panel1.putConstraint(SpringLayout.NORTH, btnCargarVideo, 62, SpringLayout.NORTH, panel1);
+		sl_panel1.putConstraint(SpringLayout.WEST, btnCargarVideo, 0, SpringLayout.EAST, txtLinkYT);
 		sl_panel1.putConstraint(SpringLayout.EAST, btnCargarVideo, -144, SpringLayout.EAST, panel1);
-		sl_panel1.putConstraint(SpringLayout.SOUTH, txtLinkYT, 16, SpringLayout.SOUTH, btnCargarVideo);
-		sl_panel1.putConstraint(SpringLayout.NORTH, btnCargarVideo, 72, SpringLayout.NORTH, panel1);
+		sl_panel1.putConstraint(SpringLayout.SOUTH, txtLinkYT, 0, SpringLayout.SOUTH, btnCargarVideo);
+		sl_panel1.putConstraint(SpringLayout.SOUTH, btnCargarVideo, 103, SpringLayout.NORTH, panel1);
 		btnCargarVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String link = txtLinkYT.getText();
@@ -264,6 +261,26 @@ public class VentanaPrincipal extends JFrame {
 					}
 					//Indexa los archivos nuevos
 					miCoordinador.escribirIndex();
+					
+					int cantidadDeSubtitulos = subtitulos.getListSubtitulos().size();
+					listaTotalPalabras = miCoordinador.obtenerCantidadPalabras(cantidadDeSubtitulos);
+					
+					listaTotalPalabras = listaTotalPalabras.stream().distinct().collect(Collectors.toList());
+					elements = new Object[listaTotalPalabras.size()];
+					for(int i = 0; i< listaTotalPalabras.size();i++) {
+						elements[i] = listaTotalPalabras.get(i);
+					}
+			
+					Runnable crearSugerencia = new Runnable() {
+					     public void run() {
+					    	// autocomplete = new UniqueList<Object>(new BasicEventList<Object>());
+					    	 AutoCompleteSupport autocomplete = AutoCompleteSupport.install(comboBox, GlazedLists.eventListOf(elements));
+				        		autocomplete.setFilterMode(TextMatcherEditor.CONTAINS);
+					         //System.out.println("Hello World on " + Thread.currentThread());
+					     }
+					 	
+					 };
+					 SwingUtilities.invokeLater(crearSugerencia);
 					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

@@ -61,7 +61,7 @@ public class LuceneSearchHighlighter
     {
     
     }
-    public static Subtitulos ejecutarHighlighter(String txtBuscarPalabras, Subtitulos subtitulos) throws Exception {
+    public static Subtitulos ejecutarHighlighter(Object palabraABuscar, Subtitulos subtitulos) throws Exception {
     	
     	listaFrags = null;
         
@@ -84,8 +84,8 @@ public class LuceneSearchHighlighter
          
         
         //Crear la consulta
-        System.out.println(txtBuscarPalabras+"");
-        Query query = qp.parse(txtBuscarPalabras+""/*cottage private discovery concluded*/);
+        System.out.println(palabraABuscar+"");
+        Query query = qp.parse(palabraABuscar+""/*cottage private discovery concluded*/);
          
         //Buscar documentos lucene, los mejores 30 documentos
         
