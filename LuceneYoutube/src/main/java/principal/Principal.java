@@ -70,26 +70,5 @@ public class Principal {
 		ventana.setVisible(true);
 		
 		
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run() {
-				try {
-					
-					
-					
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-				
-				
-			
-		
-		
-		
-		
 	}
 }

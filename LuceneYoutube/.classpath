@@ -55,5 +55,6 @@
 	<classpathentry kind="lib" path="E:/Descargas/lucene-core-2.9.0.jar"/>
 	<classpathentry kind="lib" path="E:/Escritorio/glazedlists-1.11.0.jar"/>
 	<classpathentry kind="lib" path="E:/Escritorio/glazedlists-1.11.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="E:/Descargas/itext-2.0.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

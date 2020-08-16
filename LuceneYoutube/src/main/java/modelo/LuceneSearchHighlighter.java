@@ -14,11 +14,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.RepaintManager;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -53,6 +56,7 @@ public class LuceneSearchHighlighter
     //This contains the lucene indexed documents
     private static final String INDEX_DIR = "E:\\Escritorio\\LuceneFinal\\Index";
 	private static ArrayList<String[]> listaFrags;
+	private static Analyzer analyzer;
 	
 
  
@@ -61,7 +65,7 @@ public class LuceneSearchHighlighter
     {
     
     }
-    public static Subtitulos ejecutarHighlighter(Object palabraABuscar, Subtitulos subtitulos) throws Exception {
+    public static Subtitulos ejecutarHighlighter(Object palabraABuscar, Subtitulos subtitulos, JRadioButton rdbtnEN) throws Exception {
     	
     	listaFrags = null;
         
@@ -76,8 +80,13 @@ public class LuceneSearchHighlighter
         IndexSearcher searcher = new IndexSearcher(reader);
          
         
-        //analyzer con las "stop words" predeterminadas
-        Analyzer analyzer = new StandardAnalyzer();
+       //if(rdbtnEN.isSelected()) {
+    	   //analyzer con las "stop words" predeterminadas
+           analyzer = new StandardAnalyzer();
+       //}else {
+    	 //  analyzer = new SpanishAnalyzer();
+       //}
+       
          
         //Query parser para ser usado para crear TermQuery
         QueryParser qp = new QueryParser("contents", analyzer);

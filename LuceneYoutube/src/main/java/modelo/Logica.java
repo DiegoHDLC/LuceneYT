@@ -287,30 +287,11 @@ public class Logica {
 				    	for(int k = 0; k < palabras.length; k++) {
 				    		TotalPalabras.add(palabras[k]);
 				    	}
-				    	//System.out.println("-------------------");
 				    	
 				    }
-				    
-				    
 				}
 			}
-			for(int i = 0; i < TotalPalabras.size();i++) {
-				System.out.println("Total de palabras: "+TotalPalabras.get(i));
-			}
+			
 		return TotalPalabras;
 	}
-
-	/*public void hiloAutocompletado(final JComboBox comboBox, final Object[] elements) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	AutoCompleteSupport autocomplete = AutoCompleteSupport.install(comboBox, GlazedLists.eventListOf(elements));
-        		autocomplete.setFilterMode(TextMatcherEditor.CONTAINS);
-            }
-        });
-		
-		
-	}
-	*/
-
 }

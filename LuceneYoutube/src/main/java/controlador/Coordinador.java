@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -110,9 +111,9 @@ public class Coordinador {
 	}
 
 	@SuppressWarnings("static-access")
-	public Subtitulos destacarPalabras(Object comboBox, Subtitulos subtitulos) throws Exception {
+	public Subtitulos destacarPalabras(Object comboBox, Subtitulos subtitulos, JRadioButton rdbtnEN) throws Exception {
 		Documento documento;
-		subtitulos = destacadorPalabras.ejecutarHighlighter(comboBox, subtitulos);
+		subtitulos = destacadorPalabras.ejecutarHighlighter(comboBox, subtitulos, rdbtnEN);
 		return subtitulos;
 		
 	}
